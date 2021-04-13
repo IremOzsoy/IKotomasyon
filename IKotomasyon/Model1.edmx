@@ -1,0 +1,480 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="IKModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tblGirisEkrani">
+          <Key>
+            <PropertyRef Name="kullaniciID" />
+          </Key>
+          <Property Name="kullaniciID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="kullaniciAdi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="kullaniciSifre" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblIzinIslemleri">
+          <Key>
+            <PropertyRef Name="izinID" />
+          </Key>
+          <Property Name="izinID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personelID" Type="int" Nullable="false" />
+          <Property Name="izinTipi" Type="int" />
+          <Property Name="izinGunSayisi" Type="int" />
+          <Property Name="izinBaslangicTarihi" Type="datetime" Nullable="false" />
+          <Property Name="izinBitisTarihi" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblMaasIslemleri">
+          <Key>
+            <PropertyRef Name="personelMaasID" />
+          </Key>
+          <Property Name="personelMaasID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personelID" Type="int" Nullable="false" />
+          <Property Name="personelMesaiID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblMesaiIslemleri">
+          <Key>
+            <PropertyRef Name="mesaiID" />
+          </Key>
+          <Property Name="mesaiID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personelID" Type="int" Nullable="false" />
+          <Property Name="mesaiTarihi" Type="datetime" />
+          <Property Name="girisSaati" Type="datetime" />
+          <Property Name="cikisSaati" Type="datetime" />
+          <Property Name="gunlukMesai" Type="float" />
+          <Property Name="fazlaMesai" Type="float" />
+          <Property Name="eksikMesai" Type="float" />
+          <Property Name="mesaiDonemi" Type="float" />
+        </EntityType>
+        <EntityType Name="tblPersonelIslemleri">
+          <Key>
+            <PropertyRef Name="personelID" />
+          </Key>
+          <Property Name="personelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personelTc" Type="varchar" MaxLength="11" Nullable="false" />
+          <Property Name="personelAdi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="personelSoyadi" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="personelTel" Type="varchar" MaxLength="11" />
+          <Property Name="personelAdres" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="personelDepartman" Type="varchar" MaxLength="30" />
+          <Property Name="personelGorevi" Type="varchar" MaxLength="30" />
+          <Property Name="personelDurum" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="personelIban" Type="varchar" MaxLength="26" Nullable="false" />
+          <Property Name="personelNetMaas" Type="money" Nullable="false" />
+          <Property Name="personelGirisTarihi" Type="datetime" Nullable="false" />
+          <Property Name="personelCikisTarihi" Type="datetime" Nullable="false" />
+          <Property Name="personelDogumTarihi" Type="datetime" Nullable="false" />
+          <Property Name="personelBrütMaas" Type="money" Nullable="false" />
+          <Property Name="personelGunlukMaas" Type="money" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblPrimIslemleri">
+          <Key>
+            <PropertyRef Name="primID" />
+          </Key>
+          <Property Name="primID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="personelID" Type="int" Nullable="false" />
+          <Property Name="primTutar" Type="float" Nullable="false" />
+          <Property Name="primDonem" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tblIzinIslemleri_tblPersonelIslemleri">
+          <End Role="tblPersonelIslemleri" Type="Self.tblPersonelIslemleri" Multiplicity="1" />
+          <End Role="tblIzinIslemleri" Type="Self.tblIzinIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPersonelIslemleri">
+              <PropertyRef Name="personelID" />
+            </Principal>
+            <Dependent Role="tblIzinIslemleri">
+              <PropertyRef Name="personelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaasIslemleri_tblMesaiIslemleri">
+          <End Role="tblMesaiIslemleri" Type="Self.tblMesaiIslemleri" Multiplicity="1" />
+          <End Role="tblMaasIslemleri" Type="Self.tblMaasIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMesaiIslemleri">
+              <PropertyRef Name="mesaiID" />
+            </Principal>
+            <Dependent Role="tblMaasIslemleri">
+              <PropertyRef Name="personelMesaiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaasIslemleri_tblPersonelIslemleri">
+          <End Role="tblPersonelIslemleri" Type="Self.tblPersonelIslemleri" Multiplicity="1" />
+          <End Role="tblMaasIslemleri" Type="Self.tblMaasIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPersonelIslemleri">
+              <PropertyRef Name="personelID" />
+            </Principal>
+            <Dependent Role="tblMaasIslemleri">
+              <PropertyRef Name="personelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMesaiIslemleri_tblPersonelIslemleri">
+          <End Role="tblPersonelIslemleri" Type="Self.tblPersonelIslemleri" Multiplicity="1" />
+          <End Role="tblMesaiIslemleri" Type="Self.tblMesaiIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPersonelIslemleri">
+              <PropertyRef Name="personelID" />
+            </Principal>
+            <Dependent Role="tblMesaiIslemleri">
+              <PropertyRef Name="personelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPrimIslemleri_tblPersonelIslemleri">
+          <End Role="tblPersonelIslemleri" Type="Self.tblPersonelIslemleri" Multiplicity="1" />
+          <End Role="tblPrimIslemleri" Type="Self.tblPrimIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPersonelIslemleri">
+              <PropertyRef Name="personelID" />
+            </Principal>
+            <Dependent Role="tblPrimIslemleri">
+              <PropertyRef Name="personelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IKModelStoreContainer">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblGirisEkrani" EntityType="Self.tblGirisEkrani" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblIzinIslemleri" EntityType="Self.tblIzinIslemleri" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMaasIslemleri" EntityType="Self.tblMaasIslemleri" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMesaiIslemleri" EntityType="Self.tblMesaiIslemleri" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPersonelIslemleri" EntityType="Self.tblPersonelIslemleri" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblPrimIslemleri" EntityType="Self.tblPrimIslemleri" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblIzinIslemleri_tblPersonelIslemleri" Association="Self.FK_tblIzinIslemleri_tblPersonelIslemleri">
+            <End Role="tblPersonelIslemleri" EntitySet="tblPersonelIslemleri" />
+            <End Role="tblIzinIslemleri" EntitySet="tblIzinIslemleri" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaasIslemleri_tblMesaiIslemleri" Association="Self.FK_tblMaasIslemleri_tblMesaiIslemleri">
+            <End Role="tblMesaiIslemleri" EntitySet="tblMesaiIslemleri" />
+            <End Role="tblMaasIslemleri" EntitySet="tblMaasIslemleri" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaasIslemleri_tblPersonelIslemleri" Association="Self.FK_tblMaasIslemleri_tblPersonelIslemleri">
+            <End Role="tblPersonelIslemleri" EntitySet="tblPersonelIslemleri" />
+            <End Role="tblMaasIslemleri" EntitySet="tblMaasIslemleri" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMesaiIslemleri_tblPersonelIslemleri" Association="Self.FK_tblMesaiIslemleri_tblPersonelIslemleri">
+            <End Role="tblPersonelIslemleri" EntitySet="tblPersonelIslemleri" />
+            <End Role="tblMesaiIslemleri" EntitySet="tblMesaiIslemleri" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPrimIslemleri_tblPersonelIslemleri" Association="Self.FK_tblPrimIslemleri_tblPersonelIslemleri">
+            <End Role="tblPersonelIslemleri" EntitySet="tblPersonelIslemleri" />
+            <End Role="tblPrimIslemleri" EntitySet="tblPrimIslemleri" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IKModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tblGirisEkrani">
+          <Key>
+            <PropertyRef Name="kullaniciID" />
+          </Key>
+          <Property Name="kullaniciID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="kullaniciAdi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="kullaniciSifre" Type="Byte" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblIzinIslemleri">
+          <Key>
+            <PropertyRef Name="izinID" />
+          </Key>
+          <Property Name="izinID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personelID" Type="Int32" Nullable="false" />
+          <Property Name="izinTipi" Type="Int32" />
+          <Property Name="izinGunSayisi" Type="Int32" />
+          <Property Name="izinBaslangicTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="izinBitisTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="tblPersonelIslemleri" Relationship="Self.FK_tblIzinIslemleri_tblPersonelIslemleri" FromRole="tblIzinIslemleri" ToRole="tblPersonelIslemleri" />
+        </EntityType>
+        <EntityType Name="tblMaasIslemleri">
+          <Key>
+            <PropertyRef Name="personelMaasID" />
+          </Key>
+          <Property Name="personelMaasID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personelID" Type="Int32" Nullable="false" />
+          <Property Name="personelMesaiID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblMesaiIslemleri" Relationship="Self.FK_tblMaasIslemleri_tblMesaiIslemleri" FromRole="tblMaasIslemleri" ToRole="tblMesaiIslemleri" />
+          <NavigationProperty Name="tblPersonelIslemleri" Relationship="Self.FK_tblMaasIslemleri_tblPersonelIslemleri" FromRole="tblMaasIslemleri" ToRole="tblPersonelIslemleri" />
+        </EntityType>
+        <EntityType Name="tblMesaiIslemleri">
+          <Key>
+            <PropertyRef Name="mesaiID" />
+          </Key>
+          <Property Name="mesaiID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personelID" Type="Int32" Nullable="false" />
+          <Property Name="mesaiTarihi" Type="DateTime" Precision="3" />
+          <Property Name="girisSaati" Type="DateTime" Precision="3" />
+          <Property Name="cikisSaati" Type="DateTime" Precision="3" />
+          <Property Name="gunlukMesai" Type="Double" />
+          <Property Name="fazlaMesai" Type="Double" />
+          <Property Name="eksikMesai" Type="Double" />
+          <Property Name="mesaiDonemi" Type="Double" />
+          <NavigationProperty Name="tblMaasIslemleris" Relationship="Self.FK_tblMaasIslemleri_tblMesaiIslemleri" FromRole="tblMesaiIslemleri" ToRole="tblMaasIslemleri" />
+          <NavigationProperty Name="tblPersonelIslemleri" Relationship="Self.FK_tblMesaiIslemleri_tblPersonelIslemleri" FromRole="tblMesaiIslemleri" ToRole="tblPersonelIslemleri" />
+        </EntityType>
+        <EntityType Name="tblPersonelIslemleri">
+          <Key>
+            <PropertyRef Name="personelID" />
+          </Key>
+          <Property Name="personelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personelTc" Type="String" MaxLength="11" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="personelAdi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="personelSoyadi" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="personelTel" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+          <Property Name="personelAdres" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="personelDepartman" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="personelGorevi" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="personelDurum" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="personelIban" Type="String" MaxLength="26" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="personelNetMaas" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="personelGirisTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="personelCikisTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="personelDogumTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="personelBrütMaas" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="personelGunlukMaas" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <NavigationProperty Name="tblIzinIslemleris" Relationship="Self.FK_tblIzinIslemleri_tblPersonelIslemleri" FromRole="tblPersonelIslemleri" ToRole="tblIzinIslemleri" />
+          <NavigationProperty Name="tblMaasIslemleris" Relationship="Self.FK_tblMaasIslemleri_tblPersonelIslemleri" FromRole="tblPersonelIslemleri" ToRole="tblMaasIslemleri" />
+          <NavigationProperty Name="tblMesaiIslemleris" Relationship="Self.FK_tblMesaiIslemleri_tblPersonelIslemleri" FromRole="tblPersonelIslemleri" ToRole="tblMesaiIslemleri" />
+          <NavigationProperty Name="tblPrimIslemleris" Relationship="Self.FK_tblPrimIslemleri_tblPersonelIslemleri" FromRole="tblPersonelIslemleri" ToRole="tblPrimIslemleri" />
+        </EntityType>
+        <EntityType Name="tblPrimIslemleri">
+          <Key>
+            <PropertyRef Name="primID" />
+          </Key>
+          <Property Name="primID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="personelID" Type="Int32" Nullable="false" />
+          <Property Name="primTutar" Type="Double" Nullable="false" />
+          <Property Name="primDonem" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tblPersonelIslemleri" Relationship="Self.FK_tblPrimIslemleri_tblPersonelIslemleri" FromRole="tblPrimIslemleri" ToRole="tblPersonelIslemleri" />
+        </EntityType>
+        <Association Name="FK_tblIzinIslemleri_tblPersonelIslemleri">
+          <End Role="tblPersonelIslemleri" Type="Self.tblPersonelIslemleri" Multiplicity="1" />
+          <End Role="tblIzinIslemleri" Type="Self.tblIzinIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPersonelIslemleri">
+              <PropertyRef Name="personelID" />
+            </Principal>
+            <Dependent Role="tblIzinIslemleri">
+              <PropertyRef Name="personelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaasIslemleri_tblMesaiIslemleri">
+          <End Role="tblMesaiIslemleri" Type="Self.tblMesaiIslemleri" Multiplicity="1" />
+          <End Role="tblMaasIslemleri" Type="Self.tblMaasIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblMesaiIslemleri">
+              <PropertyRef Name="mesaiID" />
+            </Principal>
+            <Dependent Role="tblMaasIslemleri">
+              <PropertyRef Name="personelMesaiID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMaasIslemleri_tblPersonelIslemleri">
+          <End Role="tblPersonelIslemleri" Type="Self.tblPersonelIslemleri" Multiplicity="1" />
+          <End Role="tblMaasIslemleri" Type="Self.tblMaasIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPersonelIslemleri">
+              <PropertyRef Name="personelID" />
+            </Principal>
+            <Dependent Role="tblMaasIslemleri">
+              <PropertyRef Name="personelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblMesaiIslemleri_tblPersonelIslemleri">
+          <End Role="tblPersonelIslemleri" Type="Self.tblPersonelIslemleri" Multiplicity="1" />
+          <End Role="tblMesaiIslemleri" Type="Self.tblMesaiIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPersonelIslemleri">
+              <PropertyRef Name="personelID" />
+            </Principal>
+            <Dependent Role="tblMesaiIslemleri">
+              <PropertyRef Name="personelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tblPrimIslemleri_tblPersonelIslemleri">
+          <End Role="tblPersonelIslemleri" Type="Self.tblPersonelIslemleri" Multiplicity="1" />
+          <End Role="tblPrimIslemleri" Type="Self.tblPrimIslemleri" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblPersonelIslemleri">
+              <PropertyRef Name="personelID" />
+            </Principal>
+            <Dependent Role="tblPrimIslemleri">
+              <PropertyRef Name="personelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IKEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="tblGirisEkranis" EntityType="Self.tblGirisEkrani" />
+          <EntitySet Name="tblIzinIslemleris" EntityType="Self.tblIzinIslemleri" />
+          <EntitySet Name="tblMaasIslemleris" EntityType="Self.tblMaasIslemleri" />
+          <EntitySet Name="tblMesaiIslemleris" EntityType="Self.tblMesaiIslemleri" />
+          <EntitySet Name="tblPersonelIslemleris" EntityType="Self.tblPersonelIslemleri" />
+          <EntitySet Name="tblPrimIslemleris" EntityType="Self.tblPrimIslemleri" />
+          <AssociationSet Name="FK_tblIzinIslemleri_tblPersonelIslemleri" Association="Self.FK_tblIzinIslemleri_tblPersonelIslemleri">
+            <End Role="tblPersonelIslemleri" EntitySet="tblPersonelIslemleris" />
+            <End Role="tblIzinIslemleri" EntitySet="tblIzinIslemleris" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaasIslemleri_tblMesaiIslemleri" Association="Self.FK_tblMaasIslemleri_tblMesaiIslemleri">
+            <End Role="tblMesaiIslemleri" EntitySet="tblMesaiIslemleris" />
+            <End Role="tblMaasIslemleri" EntitySet="tblMaasIslemleris" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMaasIslemleri_tblPersonelIslemleri" Association="Self.FK_tblMaasIslemleri_tblPersonelIslemleri">
+            <End Role="tblPersonelIslemleri" EntitySet="tblPersonelIslemleris" />
+            <End Role="tblMaasIslemleri" EntitySet="tblMaasIslemleris" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblMesaiIslemleri_tblPersonelIslemleri" Association="Self.FK_tblMesaiIslemleri_tblPersonelIslemleri">
+            <End Role="tblPersonelIslemleri" EntitySet="tblPersonelIslemleris" />
+            <End Role="tblMesaiIslemleri" EntitySet="tblMesaiIslemleris" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tblPrimIslemleri_tblPersonelIslemleri" Association="Self.FK_tblPrimIslemleri_tblPersonelIslemleri">
+            <End Role="tblPersonelIslemleri" EntitySet="tblPersonelIslemleris" />
+            <End Role="tblPrimIslemleri" EntitySet="tblPrimIslemleris" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IKModelStoreContainer" CdmEntityContainer="IKEntities">
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="IKModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblGirisEkranis">
+            <EntityTypeMapping TypeName="IKModel.tblGirisEkrani">
+              <MappingFragment StoreEntitySet="tblGirisEkrani">
+                <ScalarProperty Name="kullaniciID" ColumnName="kullaniciID" />
+                <ScalarProperty Name="kullaniciAdi" ColumnName="kullaniciAdi" />
+                <ScalarProperty Name="kullaniciSifre" ColumnName="kullaniciSifre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblIzinIslemleris">
+            <EntityTypeMapping TypeName="IKModel.tblIzinIslemleri">
+              <MappingFragment StoreEntitySet="tblIzinIslemleri">
+                <ScalarProperty Name="izinID" ColumnName="izinID" />
+                <ScalarProperty Name="personelID" ColumnName="personelID" />
+                <ScalarProperty Name="izinTipi" ColumnName="izinTipi" />
+                <ScalarProperty Name="izinGunSayisi" ColumnName="izinGunSayisi" />
+                <ScalarProperty Name="izinBaslangicTarihi" ColumnName="izinBaslangicTarihi" />
+                <ScalarProperty Name="izinBitisTarihi" ColumnName="izinBitisTarihi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMaasIslemleris">
+            <EntityTypeMapping TypeName="IKModel.tblMaasIslemleri">
+              <MappingFragment StoreEntitySet="tblMaasIslemleri">
+                <ScalarProperty Name="personelMaasID" ColumnName="personelMaasID" />
+                <ScalarProperty Name="personelID" ColumnName="personelID" />
+                <ScalarProperty Name="personelMesaiID" ColumnName="personelMesaiID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMesaiIslemleris">
+            <EntityTypeMapping TypeName="IKModel.tblMesaiIslemleri">
+              <MappingFragment StoreEntitySet="tblMesaiIslemleri">
+                <ScalarProperty Name="mesaiID" ColumnName="mesaiID" />
+                <ScalarProperty Name="personelID" ColumnName="personelID" />
+                <ScalarProperty Name="mesaiTarihi" ColumnName="mesaiTarihi" />
+                <ScalarProperty Name="girisSaati" ColumnName="girisSaati" />
+                <ScalarProperty Name="cikisSaati" ColumnName="cikisSaati" />
+                <ScalarProperty Name="gunlukMesai" ColumnName="gunlukMesai" />
+                <ScalarProperty Name="fazlaMesai" ColumnName="fazlaMesai" />
+                <ScalarProperty Name="eksikMesai" ColumnName="eksikMesai" />
+                <ScalarProperty Name="mesaiDonemi" ColumnName="mesaiDonemi" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPersonelIslemleris">
+            <EntityTypeMapping TypeName="IKModel.tblPersonelIslemleri">
+              <MappingFragment StoreEntitySet="tblPersonelIslemleri">
+                <ScalarProperty Name="personelID" ColumnName="personelID" />
+                <ScalarProperty Name="personelTc" ColumnName="personelTc" />
+                <ScalarProperty Name="personelAdi" ColumnName="personelAdi" />
+                <ScalarProperty Name="personelSoyadi" ColumnName="personelSoyadi" />
+                <ScalarProperty Name="personelTel" ColumnName="personelTel" />
+                <ScalarProperty Name="personelAdres" ColumnName="personelAdres" />
+                <ScalarProperty Name="personelDepartman" ColumnName="personelDepartman" />
+                <ScalarProperty Name="personelGorevi" ColumnName="personelGorevi" />
+                <ScalarProperty Name="personelDurum" ColumnName="personelDurum" />
+                <ScalarProperty Name="personelIban" ColumnName="personelIban" />
+                <ScalarProperty Name="personelNetMaas" ColumnName="personelNetMaas" />
+                <ScalarProperty Name="personelGirisTarihi" ColumnName="personelGirisTarihi" />
+                <ScalarProperty Name="personelCikisTarihi" ColumnName="personelCikisTarihi" />
+                <ScalarProperty Name="personelDogumTarihi" ColumnName="personelDogumTarihi" />
+                <ScalarProperty Name="personelBrütMaas" ColumnName="personelBrütMaas" />
+                <ScalarProperty Name="personelGunlukMaas" ColumnName="personelGunlukMaas" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblPrimIslemleris">
+            <EntityTypeMapping TypeName="IKModel.tblPrimIslemleri">
+              <MappingFragment StoreEntitySet="tblPrimIslemleri">
+                <ScalarProperty Name="primID" ColumnName="primID" />
+                <ScalarProperty Name="personelID" ColumnName="personelID" />
+                <ScalarProperty Name="primTutar" ColumnName="primTutar" />
+                <ScalarProperty Name="primDonem" ColumnName="primDonem" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
