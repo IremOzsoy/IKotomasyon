@@ -95,7 +95,7 @@ namespace IKotomasyon
             //txtToplamRaporlu.Text = toplamRaporlu.ToString();
             //txtToplamUcretli.Text = toplamUcretli.ToString();
             //txtToplamUcretsiz.Text = toplamUcretsiz.ToString();
-
+            
         }
 
         private void IzinIslemleri_Load(object sender, EventArgs e)
